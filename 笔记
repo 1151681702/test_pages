@@ -1,0 +1,93 @@
+
+from selenium import webdriver
+import unittest, time, re
+from ddt import ddt, file_data
+@ddt
+class HRMjobtitle(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        # 打开浏览器
+        cls.driver = webdriver.Chrome(executable_path='D:\Developer\python projects\seleniumautotest\dirveir\chromedriver.exe')
+        cls.driver.implicitly_wait(30)
+        # 2.输入要测试地址登录页
+        cls.base_url = "http://47.112.182.87"
+        cls.verificationErrors = []
+        cls.accept_next_alert = True
+#
+    @file_data("login.yaml")
+    def test_hrm_method(self, job):
+        print(job)
+        driver = self.driver
+        # 网页变大
+        driver.maximize_window()
+        # 进入登录页
+        driver.get("http://47.112.182.87/orangehrm/symfony/web/index.php/auth/login")
+        # driver.find_element_by_xpath("//div[@id='divUsername']/span").click()
+        # 点击输入框
+        driver.find_element_by_id("txtUsername").click()
+        # 清空输入框
+        driver.find_element_by_xpath('//*[@id="txtUsername"]').clear()
+        # 输入用户名
+        driver.find_element_by_id("txtUsername").send_keys("root")
+        # 清空密码
+        driver.find_element_by_id("txtPassword").clear()
+        # 输入密码
+        driver.find_element_by_id("txtPassword").send_keys("root1234")
+        # 点击登录
+        driver.find_element_by_id("btnLogin").click()
+        time.sleep(2)
+        driver.find_element_by_xpath("//a[@id='menu_admin_viewAdminModule']/b").click()
+        # 点击管理员job
+        driver.find_element_by_id("menu_admin_Job").click()
+        # 点击JobTitl
+        driver.find_element_by_id("menu_admin_viewJobTitleList").click()
+        # 点击添加
+        driver.find_element_by_id("btnAdd").click()
+        # 点击jobtitle输入框
+        driver.find_element_by_id("jobTitle_jobTitle").click()
+        # 清空输入框
+        driver.find_element_by_id("jobTitle_jobTitle").clear()
+        # 填写信息
+        driver.find_element_by_id("jobTitle_jobTitle").send_keys(job)
+        # 提交
+        driver.find_element_by_id("btnSave").click()
+        # 截图以随时间命名
+        filename = time.strftime('%Y-%m-%d', time.localtime(time.time()))
+        #截图完成页
+        driver.save_screenshot(str(filename) + ".png")
+        # assert "tatty22" in driver.find_element_by_id("menu_admin_viewJobTitleList").text
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.driver.quit()
+
+
+if __name__ == "__main__":
+    unittest.main()
+------------------------------------------------------------------------------------------------------------------------
+
+from selenium import webdriver
+# 1.打开网页
+driver = webdriver.Chrome(executable_path='D:\Developer\python projects\seleniumautotest\dirveir\chromedriver.exe')
+# 2.窗口最大化
+driver.maximize_window()
+# 3.输入要测试地址， 登录页
+driver.get("http://47.112.182.87/orangehrm/symfony/web/index.php/auth/login")
+# 4.输入登录信息
+
+# 5.刷新网页
+driver.refresh()
+# 6.后退网页
+driver.back()
+# 7.前进网页
+driver.forward()
+# 8.page_source,返回玩啊也源代码全部
+assert 'admin' in driver.page_source
+# 9.截屏
+driver.save_screenshot("1.png")
+# 10.推出：quit全部，close当前页关闭
+driver.quit()
+# 11.定位+操作
+driver.find_element_by_id(element_id).sendkeys("输入数据")
+12.driver.find_element_by_name/by_xpath/by_css_selector
+
